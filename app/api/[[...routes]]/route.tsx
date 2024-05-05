@@ -103,7 +103,7 @@ app.frame('/rsvp', async (c) => {
             whiteSpace: 'pre-wrap',
           }}
         >
-          You are rsvp'd @{user?.username}
+          You are rsvp'd 
         </div>
       </div>
     ),
@@ -173,7 +173,7 @@ app.frame('/mate', async (c) => {
               whiteSpace: 'pre-wrap',
             }}
           >
-            You are matched with @{match?.username}
+            You are matched with {match.username}
           </div>
         </div>
       ),
