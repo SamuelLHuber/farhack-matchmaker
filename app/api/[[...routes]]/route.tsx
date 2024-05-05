@@ -26,25 +26,25 @@ app.frame('/', (c) => {
   return c.res({
     image: (
       <div
-  style={{
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: '#2C5D37',
-    fontSize: 20,
-    fontWeight: 600,
-    padding: '20px',
-    paddingTop: '40px',
-  }}
->
-  <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Wagwan 😎🤝😎</div>
-  <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>Meet someone new on Farcaster</div>
-  <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10}}>We'll tag you within 24 hours with a match.</div>
-  <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then get cozy in DMs or a call.</div>
-</div>
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          // justifyContent: 'center',
+          backgroundColor: '#2C5D37',
+          fontSize: 20,
+          fontWeight: 600,
+          padding: '20px',
+          paddingTop: '40px',
+        }}
+      >
+        <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Wagwan 😎🤝😎</div>
+        <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>Meet someone new on Farcaster</div>
+        <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10 }}>We'll tag you within 24 hours with a match.</div>
+        <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then get cozy in DMs or a call.</div>
+      </div>
 
     ),
     intents: [
@@ -70,25 +70,25 @@ app.frame('/rsvp', async (c) => {
   return c.res({
     image: (
       <div
-      style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        // justifyContent: 'center',
-        backgroundColor: '#2C5D37',
-        fontSize: 20,
-        fontWeight: 600,
-        padding: '20px',
-        paddingTop: '40px',
-      }}
-    >
-      <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Success 🪄✨🤝</div>
-      <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>@dtech will tag you soon!</div>
-      <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10}}>@dtec will tag you and your match soon. </div>
-      <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then contact them and get cozy.</div>
-    </div>
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          // justifyContent: 'center',
+          backgroundColor: '#2C5D37',
+          fontSize: 20,
+          fontWeight: 600,
+          padding: '20px',
+          paddingTop: '40px',
+        }}
+      >
+        <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Success 🪄✨🤝</div>
+        <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>@dtech will tag you soon!</div>
+        <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10 }}>@dtec will tag you and your match soon. </div>
+        <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then contact them and get cozy.</div>
+      </div>
     ),
     intents: [
       <Button action='/'>Home</Button>,
@@ -103,75 +103,80 @@ app.frame('/mate', async (c) => {
   let user = await getUser(c.frameData?.fid!);
 
   if (!user?.power_badge) { return c.error({ message: 'Sorry power badge gated for now.' }) }
-  
-  await generateMatches(kv, week); // run manually just once for the demo
 
-  const matchesSet = `rsvp-week-${week}-matches`;
+  try {
+    // await generateMatches(kv, week); // run manually just once for the demo
 
-  // Get all members of the matches set
-  const matchMembers: {fidOne: number, fidTwo: number, posted: boolean}[]= await kv.smembers(matchesSet);
-  console.log('/mate matchMembers', matchMembers);
+    const matchesSet = `rsvp-week-${week}-matches`;
 
-  // Find the match object that contains the given fid
-  const matchData = matchMembers.find(member => {
-    return member.fidOne === user.fid || member.fidTwo === user.fid;
-  });
+    // Get all members of the matches set
+    const matchMembers: { fidOne: number, fidTwo: number, posted: boolean }[] = await kv.smembers(matchesSet);
+    console.log('/mate matchMembers', matchMembers);
 
-  if (matchData) {
-    let match: User | null;
-    console.log('/mate matchData', matchData);
-    if (matchData.fidOne === user.fid) {
-      match = await getUser(matchData.fidTwo);
-    }
-    else {
-      match = await getUser(matchData.fidOne);
-    }
+    // Find the match object that contains the given fid
+    const matchData = matchMembers.find(member => {
+      return member.fidOne === user.fid || member.fidTwo === user.fid;
+    });
 
-    if (!match) {
-      return c.error({ message: 'Error: getting match user data from store' })
-    }
+    if (matchData) {
+      let match: User | null;
+      console.log('/mate matchData', matchData);
+      if (matchData.fidOne === user.fid) {
+        match = await getUser(matchData.fidTwo);
+      }
+      else {
+        match = await getUser(matchData.fidOne);
+      }
 
-    return c.res({
-      image: (
-        <div
-          style={{
-            alignItems: 'center',
-            background: 'black',
-            backgroundSize: '100% 100%',
-            display: 'flex',
-            flexDirection: 'column',
-            flexWrap: 'nowrap',
-            height: '100%',
-            justifyContent: 'center',
-            textAlign: 'center',
-            width: '100%',
-          }}
-        >
+      if (!match) {
+        return c.error({ message: 'Error: getting match user data from store' })
+      }
+
+      return c.res({
+        image: (
           <div
             style={{
-              color: 'white',
-              fontSize: 60,
-              fontStyle: 'normal',
-              letterSpacing: '-0.025em',
-              lineHeight: 1.4,
-              marginTop: 30,
-              padding: '0 120px',
-              whiteSpace: 'pre-wrap',
+              alignItems: 'center',
+              background: 'black',
+              backgroundSize: '100% 100%',
+              display: 'flex',
+              flexDirection: 'column',
+              flexWrap: 'nowrap',
+              height: '100%',
+              justifyContent: 'center',
+              textAlign: 'center',
+              width: '100%',
             }}
           >
-            {`You are matched with ${match.username}`}
+            <div
+              style={{
+                color: 'white',
+                fontSize: 60,
+                fontStyle: 'normal',
+                letterSpacing: '-0.025em',
+                lineHeight: 1.4,
+                marginTop: 30,
+                padding: '0 120px',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {`You are matched with ${match.username}`}
+            </div>
           </div>
-        </div>
-      ),
-      intents: [
-        <Button action='/'>Home</Button>, // TODO: change to cast intent reaching out to the user
-        <Button.AddCastAction action='/permalink'>Add</Button.AddCastAction>,
-      ]
-    });
+        ),
+        intents: [
+          <Button action='/'>Home</Button>, // TODO: change to cast intent reaching out to the user
+          <Button.AddCastAction action='/permalink'>Add</Button.AddCastAction>,
+        ]
+      });
+    }
+
+
+    return c.error({ message: 'Error: getting match data.' })
+  } catch (err) {
+    console.log('Error:', err)
+    return c.error({ message: 'Wait for the results :)' });
   }
-
-
-  return c.error({ message: 'Error: getting match data.' })
 });
 
 app.castAction('/permalink', (c) => {
