@@ -7,7 +7,8 @@
     "deploy": "vercel",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "bot": "npm run build && pm2 start ecosystem.config.cjs"
   },
   "dependencies": {
     "@neynar/nodejs-sdk": "^1.21.2",
