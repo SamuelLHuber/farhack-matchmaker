@@ -126,17 +126,15 @@ app.frame('/mate', async (c) => {
   const matchesSet = `rsvp-week-${week}-matches`;
 
   // Get all members of the matches set
-  const matchMembers = await kv.smembers(matchesSet);
+  const matchMembers: {fidOne: number, fidTwo: number, posted: boolean}[]= await kv.smembers(matchesSet);
   console.log('/mate matchMembers', matchMembers);
 
   // Find the match object that contains the given fid
-  const matchObject = matchMembers.find(member => {
-    const match = JSON.parse(member);
-    return match.fidOne === user.fid || match.fidTwo === user.fid;
+  const matchData = matchMembers.find(member => {
+    return member.fidOne === user.fid || member.fidTwo === user.fid;
   });
 
-  if (matchObject) {
-    const matchData = JSON.parse(matchObject);
+  if (matchData) {
     let match: User | null;
     console.log('/mate matchData', matchData);
     if (matchData.fidOne === user.fid) {
