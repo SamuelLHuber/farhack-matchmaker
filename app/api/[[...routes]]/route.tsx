@@ -7,7 +7,7 @@ import { handle } from 'frog/next'
 import { serveStatic } from 'frog/serve-static'
 
 import { kv } from "@vercel/kv";
-import { User, getUser } from '@/app/utils'
+import { User, generateMatches, getUser } from '@/app/utils'
 
 const appName = 'Coffee';
 let week = parseInt(process.env.WEEK!); //TODO: get based on date
@@ -120,6 +120,8 @@ app.frame('/mate', async (c) => {
   let user = await getUser(c.frameData?.fid!);
 
   if (!user?.power_badge) { return c.error({ message: 'Sorry power badge gated for now.' }) }
+  
+  await generateMatches(kv, week); // run manually just once for the demo
 
   const matchesSet = `rsvp-week-${week}-matches`;
 
