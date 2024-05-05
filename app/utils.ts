@@ -7,7 +7,7 @@ export const generateMatches = async (kv: VercelKV, week: number) => {
 
     // Get all members of the rsvp set
     const rsvpMembers = await kv.smembers(rsvpSet);
-    console.log('generateMatches rsvpMembers', rsvpMembers);
+    console.log('generateMatches rsvpMembers', rsvpMembers, typeof(rsvpMembers));
 
     // Convert members to an array of objects
     const rsvpObjects: { fid: number, fname: string, matched: boolean }[] = rsvpMembers.map((member: string) => JSON.parse(member) as { fid: number, fname: string, matched: boolean });
