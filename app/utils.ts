@@ -70,7 +70,7 @@ export async function getUser(fid: number): Promise<User | null> {
     console.log('getUsers response', response);
     const users = response.users;
     if (users.length > 0) {
-        user = users[0];
+        return user = users[0];
     }
     return null;
 }
