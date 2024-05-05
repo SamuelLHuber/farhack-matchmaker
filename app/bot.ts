@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { kv } from "@vercel/kv";
-import { generateMatches, publishCast } from "./utils";
+import { generateMatches } from "./utils";
 
 let week = parseInt(process.env.WEEK!); //TODO: get based on date
 

@@ -64,6 +64,7 @@ app.frame('/', (c) => {
 
 app.frame('/rsvp', async (c) => {
   let user = await getUser(c.frameData?.fid!);
+  console.log('rsvp user', user)
 
   if (!user?.power_badge) { return c.error({ message: 'Sorry power badge gated for now.' }) }
 

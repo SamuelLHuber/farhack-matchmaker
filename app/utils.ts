@@ -67,6 +67,7 @@ export async function getUser(fid: number): Promise<User | null> {
     let reqUser = await fetch(`https://api.neynar.com/v2/farcaster/user/bulk?fids=${fid}`, neynarOptions);
     let user: User | undefined;
     const response = await reqUser.json();
+    console.log('getUsers response', response);
     const users = response.users;
     if (users.length > 0) {
         user = users[0];
