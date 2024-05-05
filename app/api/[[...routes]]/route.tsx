@@ -40,10 +40,10 @@ app.frame('/', (c) => {
     paddingTop: '40px',
   }}
 >
-  <div style={{ color: '#E3C513', marginTop: 20, fontSize: 60 }}>Wagwan 😎🤝😎</div>
-  <div style={{ color: '#EE51B1', fontSize: 40, marginTop: 30 }}>Meet someone new on Farcaster</div>
-  <div style={{ color: '#A59CD3', fontSize: 30, marginTop: 10}}>We'll tag you within 24 hours with a match.</div>
-  <div style={{ color: '#A59CD3', fontSize: 30 }}>You can then get cozy in DMs or a call.</div>
+  <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Wagwan 😎🤝😎</div>
+  <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>Meet someone new on Farcaster</div>
+  <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10}}>We'll tag you within 24 hours with a match.</div>
+  <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then get cozy in DMs or a call.</div>
 </div>
 
     ),
@@ -84,10 +84,10 @@ app.frame('/rsvp', async (c) => {
         paddingTop: '40px',
       }}
     >
-      <div style={{ color: '#E3C513', marginTop: 20, fontSize: 60 }}>Success 🪄✨🤝</div>
-      <div style={{ color: '#EE51B1', fontSize: 40, marginTop: 30 }}>@dtech will tag you soon!</div>
-      <div style={{ color: '#A59CD3', fontSize: 30, marginTop: 10}}>@dtech will tag you and your match soon. </div>
-      <div style={{ color: '#A59CD3', fontSize: 30 }}>You can then contact them and get cozy.</div>
+      <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Success 🪄✨🤝</div>
+      <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>@dtech will tag you soon!</div>
+      <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10}}>@dtec will tag you and your match soon. </div>
+      <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then contact them and get cozy.</div>
     </div>
     ),
     intents: [
