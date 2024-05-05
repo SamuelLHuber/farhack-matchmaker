@@ -51,7 +51,7 @@ app.frame('/', (c) => {
             whiteSpace: 'pre-wrap',
           }}
         >
-          Hi
+          {'Hi press RSVP to get matched with a Farcaster next week :)'}
         </div>
       </div>
     ),
