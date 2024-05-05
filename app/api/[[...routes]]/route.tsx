@@ -85,8 +85,8 @@ app.frame('/rsvp', async (c) => {
       }}
     >
       <div style={{ color: '#E3C513', marginTop: 20, fontSize: 60 }}>Success 🪄✨🤝</div>
-      <div style={{ color: '#EE51B1', fontSize: 40, marginTop: 30 }}>@wagwanbot will tag you soon!</div>
-      <div style={{ color: '#A59CD3', fontSize: 30, marginTop: 10}}>@wagwanbot will tag you and your match soon. </div>
+      <div style={{ color: '#EE51B1', fontSize: 40, marginTop: 30 }}>@dtech will tag you soon!</div>
+      <div style={{ color: '#A59CD3', fontSize: 30, marginTop: 10}}>@dtech will tag you and your match soon. </div>
       <div style={{ color: '#A59CD3', fontSize: 30 }}>You can then contact them and get cozy.</div>
     </div>
     ),
