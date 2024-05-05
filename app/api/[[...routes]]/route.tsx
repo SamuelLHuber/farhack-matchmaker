@@ -26,34 +26,26 @@ app.frame('/', (c) => {
   return c.res({
     image: (
       <div
-        style={{
-          alignItems: 'center',
-          background: 'black',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <div
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          Hi
-        </div>
-      </div>
+  style={{
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    // justifyContent: 'center',
+    backgroundColor: '#2C5D37',
+    fontSize: 20,
+    fontWeight: 600,
+    padding: '20px',
+    paddingTop: '40px',
+  }}
+>
+  <div style={{ color: '#E3C513', marginTop: 20, fontSize: 60 }}>Wagwan 😎🤝😎</div>
+  <div style={{ color: '#EE51B1', fontSize: 40, marginTop: 30 }}>Meet someone new on Farcaster</div>
+  <div style={{ color: '#A59CD3', fontSize: 30, marginTop: 10}}>We'll tag you within 24 hours with a match.</div>
+  <div style={{ color: '#A59CD3', fontSize: 30 }}>You can then get cozy in DMs or a call.</div>
+</div>
+
     ),
     intents: [
       <Button action='/rsvp'>RSVP</Button>,
@@ -66,7 +58,7 @@ app.frame('/rsvp', async (c) => {
   let user = await getUser(c.frameData?.fid!);
   console.log('rsvp user', user)
 
-  if (!user?.power_badge) { return c.error({ message: 'Sorry power badge gated for now.' }) }
+  if (!user?.power_badge) { return c.error({ message: 'Sorry, wagwan is power badge gated for now.' }) }
 
   // get current calendar week
   let rsvp = { "fid": user?.fid, "fname": user?.username, "matched": false }
@@ -78,34 +70,25 @@ app.frame('/rsvp', async (c) => {
   return c.res({
     image: (
       <div
-        style={{
-          alignItems: 'center',
-          background: 'black',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <div
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          You are rsvp'd 
-        </div>
-      </div>
+      style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        // justifyContent: 'center',
+        backgroundColor: '#2C5D37',
+        fontSize: 20,
+        fontWeight: 600,
+        padding: '20px',
+        paddingTop: '40px',
+      }}
+    >
+      <div style={{ color: '#E3C513', marginTop: 20, fontSize: 60 }}>Success 🪄✨🤝</div>
+      <div style={{ color: '#EE51B1', fontSize: 40, marginTop: 30 }}>@wagwanbot will tag you soon!</div>
+      <div style={{ color: '#A59CD3', fontSize: 30, marginTop: 10}}>@wagwanbot will tag you and your match soon. </div>
+      <div style={{ color: '#A59CD3', fontSize: 30 }}>You can then contact them and get cozy.</div>
+    </div>
     ),
     intents: [
       <Button action='/'>Home</Button>,
