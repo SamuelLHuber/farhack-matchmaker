@@ -108,7 +108,8 @@ app.frame('/rsvp', async (c) => {
       </div>
     ),
     intents: [
-      <Button action='/'>Home</Button>
+      <Button action='/'>Home</Button>,
+      <Button.AddCastAction action='/permalink'>Add</Button.AddCastAction>,
     ]
   });
 });
@@ -124,6 +125,7 @@ app.frame('/mate', async (c) => {
 
   // Get all members of the matches set
   const matchMembers = await kv.smembers(matchesSet);
+  console.log('/mate matchMembers', matchMembers);
 
   // Find the match object that contains the given fid
   const matchObject = matchMembers.find(member => {
@@ -134,6 +136,7 @@ app.frame('/mate', async (c) => {
   if (matchObject) {
     const matchData = JSON.parse(matchObject);
     let match: User | null;
+    console.log('/mate matchData', matchData);
     if (matchData.fidOne === user.fid) {
       match = await getUser(matchData.fidTwo);
     }
@@ -142,7 +145,7 @@ app.frame('/mate', async (c) => {
     }
 
     if (!match) {
-      return c.error({ message: 'Error: getting match user data.' })
+      return c.error({ message: 'Error: getting match user data from store' })
     }
 
     return c.res({
