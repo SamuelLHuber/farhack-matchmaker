@@ -7,9 +7,11 @@ export const generateMatches = async (kv: VercelKV, week: number) => {
 
     // Get all members of the rsvp set
     const rsvpMembers = await kv.smembers(rsvpSet);
+    console.log('generateMatches rsvpMembers', rsvpMembers);
 
     // Convert members to an array of objects
     const rsvpObjects: { fid: number, fname: string, matched: boolean }[] = rsvpMembers.map((member: string) => JSON.parse(member) as { fid: number, fname: string, matched: boolean });
+    console.log('generateMatches rsvpObjects', rsvpObjects);
 
     // Shuffle the array of objects
     // You can do way fancier match making here
@@ -21,6 +23,8 @@ export const generateMatches = async (kv: VercelKV, week: number) => {
         const fidOne = shuffledRsvpObjects[i].fid;
         const fidTwo = i + 1 < shuffledRsvpObjects.length ? shuffledRsvpObjects[i + 1].fid : null;
 
+        console.log('generateMatches fidOne', fidOne, ' fidTwo ', fidTwo);
+
         if (fidTwo) {
             const match = {
                 fidOne,
@@ -28,11 +32,13 @@ export const generateMatches = async (kv: VercelKV, week: number) => {
                 published: false
             };
 
+            console.log('adding to matchesSet', match)
             await kv.sadd(matchesSet, JSON.stringify(match));
 
-            await kv.srem(rsvpSet, JSON.stringify({ fid: fidOne, fname: shuffledRsvpObjects[i].fname, matched: true }));
-            await kv.srem(rsvpSet, JSON.stringify({ fid: fidTwo, fname: shuffledRsvpObjects[i+1].fname, matched: true }));
+            // await kv.srem(rsvpSet, JSON.stringify({ fid: fidOne, fname: shuffledRsvpObjects[i].fname, matched: true }));
+            // await kv.srem(rsvpSet, JSON.stringify({ fid: fidTwo, fname: shuffledRsvpObjects[i+1].fname, matched: true }));
 
+            console.log('casting match');
             publishCast(`Matched @${shuffledRsvpObjects[i].fname} and @${shuffledRsvpObjects[i+1].fname} - please coordinate to meet.`);
         }
     }
