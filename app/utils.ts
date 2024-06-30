@@ -6,18 +6,16 @@ export const generateMatches = async (kv: VercelKV, week: number) => {
     const matchesSet = `rsvp-week-${week}-matches`;
 
     // Get all members of the rsvp set
-    const rsvpObjects: { fid: number, fname: string, matched: boolean }[] = await kv.smembers(rsvpSet);
+    const rsvpObjects: { fid: number, fname: string, buildrank: number, matched: boolean }[] = await kv.smembers(rsvpSet);
     console.log('generateMatches rsvpObjects', rsvpObjects);
 
-    // Shuffle the array of objects
-    // You can do way fancier match making here
-    // based on FID lookups to profiles one can take location (set in Warpcast), channel data, cast data, onchain data and more into account
-    const shuffledRsvpObjects = rsvpObjects.sort(() => Math.random() - 0.5); 
+    // shuffle all registered users by buildrank in descending order
+    const shuffledRsvpObjects = rsvpObjects.sort((a, b) => b.buildrank - a.buildrank);
 
     // Create pairs and add them to the matches set
-    for (let i = 0; i < shuffledRsvpObjects.length; i += 2) {
-        const fidOne = shuffledRsvpObjects[i].fid;
-        const fidTwo = i + 1 < shuffledRsvpObjects.length ? shuffledRsvpObjects[i + 1].fid : null;
+    for (let i = 0; i < Math.floor(shuffledRsvpObjects.length / 2); i++) {
+      const fidOne = shuffledRsvpObjects[i].fid;
+      const fidTwo = shuffledRsvpObjects[shuffledRsvpObjects.length - 1 - i].fid;
 
         console.log('generateMatches fidOne', fidOne, ' fidTwo ', fidTwo);
 
@@ -76,6 +74,16 @@ export async function getUser(fid: number): Promise<User | null> {
     }
     return null;
 }
+
+export type BuildStats = {
+    id: string;
+    wallet: string;
+    build_score: number;
+    build_budget: number;
+    rank: number;
+    nominations_received: number;
+    nominations_given: number;
+};
 
 export type User = {
     object: string;

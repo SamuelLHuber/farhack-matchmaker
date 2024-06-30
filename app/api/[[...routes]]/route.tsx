@@ -7,7 +7,7 @@ import { handle } from 'frog/next'
 import { serveStatic } from 'frog/serve-static'
 
 import { kv } from "@vercel/kv";
-import { User, generateMatches, getUser } from '@/app/utils'
+import { BuildStats, User, generateMatches, getUser } from '@/app/utils'
 
 const appName = 'Coffee';
 let week = parseInt(process.env.WEEK!); //TODO: get based on date
@@ -60,41 +60,47 @@ app.frame('/rsvp', async (c) => {
 
   if (!user?.power_badge) { return c.error({ message: 'Sorry, wagwan is power badge gated for now.' }) }
 
-  // get current calendar week
-  let rsvp = { "fid": user?.fid, "fname": user?.username, "matched": false }
-  if (await kv.sismember(`rsvp-week-${week}`, user?.fid)) {
-    return c.error({ message: 'You are already rsvp\'d.' })
-  }
-  kv.sadd(`rsvp-week-${week}`, JSON.stringify(rsvp));
+  try {
+    let build: BuildStats = await (await fetch(`https://build.top/api/stats?wallet=${user?.custody_address}`)).json();
+    let buildRank = build.rank;
 
-  return c.res({
-    image: (
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          // justifyContent: 'center',
-          backgroundColor: '#2C5D37',
-          fontSize: 20,
-          fontWeight: 600,
-          padding: '20px',
-          paddingTop: '40px',
-        }}
-      >
-        <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Success 🪄✨🤝</div>
-        <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>@dtech will tag you soon!</div>
-        <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10 }}>@dtec will tag you and your match soon. </div>
-        <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then contact them and get cozy.</div>
-      </div>
-    ),
-    intents: [
-      <Button action='/'>Home</Button>,
-      <Button.AddCastAction action='/permalink'>Add</Button.AddCastAction>,
-    ]
-  });
+    let rsvp = { "fid": user?.fid, "fname": user?.username, "buildrank": buildRank, "matched": false }
+    if (await kv.sismember(`rsvp-week-${week}`, user?.fid)) {
+      return c.error({ message: 'You are already rsvp\'d.' })
+    }
+    kv.sadd(`rsvp-week-${week}`, JSON.stringify(rsvp));
+
+    return c.res({
+      image: (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            // justifyContent: 'center',
+            backgroundColor: '#2C5D37',
+            fontSize: 20,
+            fontWeight: 600,
+            padding: '20px',
+            paddingTop: '40px',
+          }}
+        >
+          <div style={{ color: '#E3C513', marginTop: 20, fontSize: 80 }}>Success 🪄✨🤝</div>
+          <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>@dtech will tag you soon!</div>
+          <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10 }}>@dtech will tag you and your match soon. </div>
+          <div style={{ color: '#A59CD3', fontSize: 40 }}>You can then contact them and get cozy.</div>
+        </div>
+      ),
+      intents: [
+        <Button action='/'>Home</Button>,
+        <Button.AddCastAction action='/permalink'>Add</Button.AddCastAction>,
+      ]
+    });
+  } catch (err) {
+    return c.error({ message: 'Error: rsvp failed.' })
+  }
 });
 
 
@@ -134,33 +140,26 @@ app.frame('/mate', async (c) => {
 
       return c.res({
         image: (
-          <div
-            style={{
-              alignItems: 'center',
-              background: 'black',
-              backgroundSize: '100% 100%',
-              display: 'flex',
-              flexDirection: 'column',
-              flexWrap: 'nowrap',
-              height: '100%',
-              justifyContent: 'center',
-              textAlign: 'center',
-              width: '100%',
-            }}
-          >
+          <div>
             <div
               style={{
-                color: 'white',
-                fontSize: 60,
-                fontStyle: 'normal',
-                letterSpacing: '-0.025em',
-                lineHeight: 1.4,
-                marginTop: 30,
-                padding: '0 120px',
-                whiteSpace: 'pre-wrap',
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                // justifyContent: 'center',
+                backgroundColor: '#2C5D37',
+                fontSize: 20,
+                fontWeight: 600,
+                padding: '20px',
+                paddingTop: '40px',
               }}
             >
-              {`You are matched with ${match.username}`}
+              <div style={{ color: '#E3C513', marginTop: 80, fontSize: 60 }}>Say Wagwan! 🪄✨🤝</div>
+              <div style={{ color: '#EE51B1', fontSize: 60, marginTop: 30 }}>Check @dtech bot tagging you with your match!</div>
+              <div style={{ color: '#A59CD3', fontSize: 40, marginTop: 10 }}>Reach out to them via a DM and/or cast.  </div>
+              <div style={{ color: '#A59CD3', fontSize: 40 }}>Get to know one another over the week, however feels comfortable.</div>
             </div>
           </div>
         ),
